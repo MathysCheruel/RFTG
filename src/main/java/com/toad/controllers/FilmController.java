@@ -32,10 +32,15 @@ public class FilmController {
             @RequestParam Integer length,
             @RequestParam Double replacementCost,
             @RequestParam String rating,
+            @RequestParam String specialfeatures,
             @RequestParam java.sql.Timestamp lastUpdate,
             @RequestParam Long idDirector) {
         
+        Integer lastFilmId = filmRepository.findMaxFilmId();
+        Integer newFilmId = (lastFilmId != null) ? lastFilmId + 1 : 1;
+
         Film film = new Film();
+        film.setFilmId(newFilmId);
         film.setTitle(title);
         film.setDescription(description);
         film.setReleaseYear(releaseYear);
@@ -46,6 +51,7 @@ public class FilmController {
         film.setLength(length);
         film.setReplacementCost(replacementCost);
         film.setRating(rating);
+        film.setSpecialFeatures(specialfeatures);
         film.setLastUpdate(lastUpdate);
         film.setIdDirector(idDirector);
 

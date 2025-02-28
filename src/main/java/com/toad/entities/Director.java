@@ -19,6 +19,12 @@ public class Director {
  
     private String nationnalite; // TINYINT
  
+    public interface DirectorFilmCount {
+        Integer getDirectorId();
+        String getNom();
+        Long getNbFilms();
+    }
+
     // Getters and Setters
     public Integer getdirector_id() {
         return director_id;

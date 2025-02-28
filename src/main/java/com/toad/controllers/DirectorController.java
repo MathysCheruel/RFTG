@@ -1,6 +1,12 @@
 package com.toad.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.toad.entities.Director;
+import com.toad.entities.Director.DirectorFilmCount;
 import com.toad.repositories.DirectorRepository;
 
 @Controller
@@ -73,6 +80,30 @@ public @ResponseBody String createDirector(
     }
     return status;
 
+  }
+
+  @GetMapping(path = "/getdirector")
+  public ResponseEntity<?> getDirectorAllFilms(@RequestParam String nom, @RequestParam String prenom) {
+      try {
+          Optional<DirectorFilmCount> result = directorRepository.findRealisateurWithFilmCount(nom, prenom);
+
+          if (result.isPresent()) {
+              DirectorFilmCount data = result.get();
+
+              Map<String, Object> response = new HashMap<>();
+              response.put("directorId", data.getDirectorId());
+              response.put("nom", data.getNom());
+              response.put("nbFilms", data.getNbFilms());
+
+              return ResponseEntity.ok(response);
+          } else {
+              return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                      .body("Réalisateur non trouvé pour le nom et prénom fournis.");
+          }
+      } catch (Exception e) {
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                  .body("Erreur lors de la récupération des données : " + e.getMessage());
+      }
   }
 
   @DeleteMapping(path = "/delete/{id}")

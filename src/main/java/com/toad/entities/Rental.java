@@ -28,6 +28,14 @@ public class Rental {
     @Column(name = "last_update")
     private String last_update;
 
+    public interface RentalFilmTitle {
+        String getTitle();
+        String getRentalDate();
+        String getReturnDate(); 
+        String getFirstName();
+        String getLastName();
+    }
+
     // Getters and Setters
     public Integer getRentalId() {
         return rental_id;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.toad.entities.Film;
 import com.toad.entities.Rental;
 import com.toad.repositories.RentalRepository;
 
@@ -30,25 +31,22 @@ public class RentalController {
             @RequestParam Integer staff_id,
             @RequestParam String last_update) {
 
-        Rental rental = RentalRepository.findById(rental_id).orElse(null);
-        String message_retour;
-        
-        if (rental != null) {
-
-            rental.setRentalId(rental_id);
+        String status = null;
+        if (RentalRepository.existsById(rental_id)) {
+            Rental rental = RentalRepository.findById(rental_id).orElse(null);
             rental.setRentalDate(rental_date);
             rental.setInventoryId(inventory_id);
             rental.setCustomerId(customer_id);
             rental.setReturnDate(return_date);
             rental.setStaffId(staff_id);
             rental.setLastUpdate(last_update);
+
             RentalRepository.save(rental);
-            
-            message_retour = "Rental Updated";
+            status = "Rental mis à jour";
         } else {
-            message_retour = "Rental not found";
+            status = "Rental introuvable";
         }
-        return message_retour;
+        return status;
     }
 
     @PostMapping(path = "/add")
@@ -92,17 +90,6 @@ public class RentalController {
     @GetMapping(path = "/getById")
     public @ResponseBody Rental getRentalById(@RequestParam Integer id) {
         Rental rental = RentalRepository.findById(id).orElse(null);
-        if (rental != null) {
-            Rental filteredRental = new Rental();
-            filteredRental.setRentalId(rental.getRentalId());
-            filteredRental.setRentalDate(rental.getRentalDate());
-            filteredRental.setInventoryId(rental.getInventoryId());
-            filteredRental.setCustomerId(rental.getCustomerId());
-            filteredRental.setReturnDate(rental.getReturnDate());
-            filteredRental.setStaffId(rental.getStaffId());
-            filteredRental.setLastUpdate(rental.getLastUpdate());
-            return filteredRental;
-        }
-        return null;
+        return rental;
     }
 }

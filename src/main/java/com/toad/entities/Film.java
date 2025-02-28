@@ -1,8 +1,8 @@
 package com.toad.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
 
 
 @Entity // This tells Hibernate to make a table out of this class

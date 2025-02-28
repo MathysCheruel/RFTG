@@ -8,5 +8,5 @@ import com.toad.entities.Customer;
 // CRUD refers Create, Read, Update, Delete
 
 public interface CustomerRepository extends CrudRepository<Customer, Integer> {
-
+ 
 }
